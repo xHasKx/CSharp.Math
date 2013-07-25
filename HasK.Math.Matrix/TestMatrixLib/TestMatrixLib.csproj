@@ -33,7 +33,7 @@
   <ItemGroup>
     <Reference Include="HasK.Math.Matrix, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MatrixLib\bin\Debug\HasK.Math.Matrix.dll</HintPath>
+      <HintPath>..\MatrixLib\bin\Release\HasK.Math.Matrix.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

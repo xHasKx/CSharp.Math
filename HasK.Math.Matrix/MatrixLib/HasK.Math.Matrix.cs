@@ -1,17 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace HasK.Math
 {
-    public class Matrix: ICloneable, IEquatable<Matrix>
+    /// <summary>
+    /// Simple two-dimensional matrix with double items
+    /// </summary>
+    [Serializable]
+    public class Matrix : ICloneable, IEquatable<Matrix>, ISerializable, IXmlSerializable
     {
+        #region Private fields
         private double[,] data;
+        [XmlAttribute]
         private int rows, cols;
+        #endregion
 
+        #region Public properties
+        /// <summary>
+        /// Rows count of matrix
+        /// </summary>
+        [XmlIgnoreAttribute]
         public int Rows { get { return rows; } private set { rows = value; } }
+        /// <summary>
+        /// Columns count of matrix
+        /// </summary>
+        [XmlIgnoreAttribute]
         public int Cols { get { return cols; } private set { cols = value; } }
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Create empty matrix with zero size - for serialization
+        /// </summary>
+        public Matrix()
+        {
+            this.rows = 0;
+            this.cols = 0;
+            this.data = null;
+        }
+
+        protected Matrix(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new System.ArgumentNullException("info is null");
+            rows = info.GetInt32("rows");
+            cols = info.GetInt32("cols");
+            if (rows <= 0 || cols <= 0)
+                throw new ArgumentException("Wrong cols or rows number");
+            data = new double[rows, cols];
+            int r, c;
+            for (r = 0; r < rows; r++)
+                for (c = 0; c < cols; c++)
+                    data[r, c] = info.GetDouble(r + "_" + c);
+        }
+
+        /// <summary>
+        /// Create new matrix with specified size
+        /// </summary>
+        /// <param name="rows">Rows of matrix</param>
+        /// <param name="cols">Columns of matrix</param>
         public Matrix(int rows, int cols)
         {
             if (rows <= 0 || cols <= 0)
@@ -20,51 +73,9 @@ namespace HasK.Math
             this.cols = cols;
             data = new double[rows, cols];
         }
+        #endregion
 
-        /// <summary>
-        /// Returns new identity matrix
-        /// </summary>
-        /// <param name="size">Dimension of matrix</param>
-        /// <param name="value">Value on main diagonal of matrix</param>
-        public static Matrix Identity(int size, double value)
-        {
-            Matrix m = new Matrix(size, size);
-            double[,] data = m.GetData();
-            for (int i = 0; i < size; i++)
-                data[i, i] = value;
-            return m;
-        }
-
-        /// <summary>
-        /// Returns new identity matrix
-        /// </summary>
-        /// <param name="size">Dimension of matrix</param>
-        public static Matrix Identity(int size)
-        {
-            return Identity(size, 1);
-        }
-
-        public double[,] GetData()
-        {
-            return data;
-        }
-
-        public double Get(int row, int col)
-        {
-            return data[row, col];
-        }
-
-        public void Set(int row, int col, double value)
-        {
-            data[row, col] = value;
-        }
-
-        public double this[int row, int col]
-        {
-            get { return Get(row, col); }
-            set { Set(row, col, value); }
-        }
-
+        #region String representation
         /// <summary>
         /// Returns data in matrix as string
         /// </summary>
@@ -103,12 +114,92 @@ namespace HasK.Math
         /// </summary>
         public string ToStringData()
         {
-            return ToStringData(", ");
+            return ToStringData("  ");
         }
 
+        /// <summary>
+        /// Returns string representation of matrix
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return String.Format("<Matrix {0}x{1}>", rows, cols);
+        }
+        #endregion
+
+        #region Data checks
+        /// <summary>
+        /// Check if this matrix is equals other matrix dimension
+        /// </summary>
+        /// <param name="other">Other matrix to compare</param>
+        public bool EqualsByDimension(Matrix other)
+        {
+            if (rows != other.rows || cols != other.cols)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Check if this matrix agreed with other matrix
+        /// </summary>
+        /// <param name="other">Other matrix</param>
+        public bool AgreedWith(Matrix other)
+        {
+            return cols == other.Rows;
+        }
+        #endregion
+
+        #region Data manipulations
+        /// <summary>
+        /// Returns array with data in matrix
+        /// </summary>
+        public double[,] GetData()
+        {
+            return data;
+        }
+
+        /// <summary>
+        /// Returns value in specified cell of matrix
+        /// </summary>
+        /// <param name="row">Row of cell</param>
+        /// <param name="col">Column of cell</param>
+        public double Get(int row, int col)
+        {
+            return data[row, col];
+        }
+
+        /// <summary>
+        /// Set value in specified matrix cell
+        /// </summary>
+        /// <param name="row">Row of cell</param>
+        /// <param name="col">Column of cell</param>
+        /// <param name="value">New value of cell</param>
+        public void Set(int row, int col, double value)
+        {
+            data[row, col] = value;
+        }
+
+        /// <summary>
+        /// Set all cells of matrix to specified value
+        /// </summary>
+        /// <param name="value">Value for each cell in matrix</param>
+        public void SetAll(double value)
+        {
+            int r, c;
+            for (r = 0; r < rows; r++)
+                for (c = 0; c < cols; c++)
+                    data[r, c] = value;
+        }
+
+        /// <summary>
+        /// Returns cell value by specified row and column
+        /// </summary>
+        /// <param name="row">Row of cell</param>
+        /// <param name="col">Column of cell</param>
+        public double this[int row, int col]
+        {
+            get { return Get(row, col); }
+            set { Set(row, col, value); }
         }
 
         /// <summary>
@@ -124,20 +215,6 @@ namespace HasK.Math
             for (r = 0; r < min_rows; r++)
                 for (c = 0; c < min_cols; c++)
                     data[r, c] = odata[r, c];
-        }
-
-        /// <summary>
-        /// Transparent current matrix
-        /// </summary>
-        /// <returns>Returns new result matrix</returns>
-        public Matrix Transparent()
-        {
-            Matrix res = new Matrix(cols, rows);
-            double[,] newData = res.GetData();
-            for (int r = 0; r < rows; r++)
-                for (int c = 0; c < cols; c++)
-                    newData[c, r] = data[r, c];
-            return res;
         }
 
         /// <summary>
@@ -170,49 +247,6 @@ namespace HasK.Math
                 data[r, col1] = data[r, col2];
                 data[r, col2] = tmp;
             }
-        }
-
-        #region ICloneable Members
-
-        public object Clone()
-        {
-            Matrix clone = new Matrix(cols, rows);
-            clone.CopyDataFrom(this);
-            return clone;
-        }
-
-        public Matrix Copy()
-        {
-            return Clone() as Matrix;
-        }
-
-        #endregion
-
-        #region IEquatable<Matrix> Members
-
-        public bool Equals(Matrix other)
-        {
-            if (!EqualsByDimension(other))
-                return false;
-            double[,] odata = other.GetData();
-            for (int c = 0; c < cols; c++)
-                for (int r = 0; r < rows; r++)
-                    if (data[r, c] != odata[r, c])
-                        return false;
-            return true;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Check if this matrix is equals other matrix dimension
-        /// </summary>
-        /// <param name="other">Other matrix to compare</param>
-        public bool EqualsByDimension(Matrix other)
-        {
-            if (rows != other.rows || cols != other.cols)
-                return false;
-            return true;
         }
 
         /// <summary>
@@ -273,6 +307,10 @@ namespace HasK.Math
                 data[row, c] = items[c];
         }
 
+        /// <summary>
+        /// Set all items in matrix to specified values
+        /// </summary>
+        /// <param name="items">Items to put to matrix</param>
         public void SetData(params double[] items)
         {
             if (items.Length != rows*cols)
@@ -281,6 +319,46 @@ namespace HasK.Math
             for (r = 0; r < rows; r++)
                 for (c = 0; c < cols; c++)
                     data[r, c] = items[pos++];
+        }
+        #endregion
+
+        #region Math operations
+        /// <summary>
+        /// Returns new identity matrix
+        /// </summary>
+        /// <param name="size">Dimension of matrix</param>
+        /// <param name="value">Value on main diagonal of matrix</param>
+        public static Matrix Identity(int size, double value)
+        {
+            Matrix m = new Matrix(size, size);
+            double[,] data = m.GetData();
+            for (int i = 0; i < size; i++)
+                data[i, i] = value;
+            return m;
+        }
+
+        /// <summary>
+        /// Returns new identity matrix
+        /// </summary>
+        /// <param name="size">Dimension of matrix</param>
+        public static Matrix Identity(int size)
+        {
+            return Identity(size, 1);
+        }
+
+        /// <summary>
+        /// Transparent current matrix
+        /// </summary>
+        /// <returns>Returns new result matrix</returns>
+        public Matrix Transparent()
+        {
+            Matrix res = new Matrix(cols, rows);
+            double[,] newData = res.GetData();
+            int r, c;
+            for (r = 0; r < rows; r++)
+                for (c = 0; c < cols; c++)
+                    newData[c, r] = data[r, c];
+            return res;
         }
 
         /// <summary>
@@ -302,13 +380,19 @@ namespace HasK.Math
             return res;
         }
 
+        /// <summary>
+        /// Add second matrix to first
+        /// </summary>
+        /// <param name="first">First matrix</param>
+        /// <param name="second">Second matrix</param>
+        /// <returns>Returns new result matrix</returns>
         public static Matrix operator +(Matrix first, Matrix second)
         {
             return first.Add(second);
         }
 
         /// <summary>
-        /// Multiply matrix by scalar value
+        /// Multiplies matrix by scalar value
         /// </summary>
         /// <param name="value">Multiplier value</param>
         /// <returns>Returns new result matrix</returns>
@@ -323,18 +407,15 @@ namespace HasK.Math
             return res;
         }
 
+        /// <summary>
+        /// Multiplies matrix by scalar value
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="value">Multiplier value</param>
+        /// <returns>Returns new result matrix</returns>
         public static Matrix operator *(Matrix matrix, double value)
         {
             return matrix.Multiply(value);
-        }
-
-        /// <summary>
-        /// Check if this matrix agreed with other matrix
-        /// </summary>
-        /// <param name="other">Other matrix</param>
-        public bool AgreedWith(Matrix other)
-        {
-            return cols == other.Rows;
         }
 
         /// <summary>
@@ -360,9 +441,157 @@ namespace HasK.Math
             return res;
         }
 
+        /// <summary>
+        /// Multiply first matrix by second matrix
+        /// </summary>
+        /// <param name="first">First matrix</param>
+        /// <param name="second">Second matrix</param>
+        /// <returns>Returns new result matrix</returns>
         public static Matrix operator *(Matrix first, Matrix second)
         {
             return first.Multiply(second);
         }
+
+        /// <summary>
+        /// Check if first matrix equals second
+        /// </summary>
+        /// <param name="first">First matrix</param>
+        /// <param name="second">Second matrix</param>
+        public static bool operator ==(Matrix first, Matrix second)
+        {
+            return first.Equals(second);
+        }
+
+        /// <summary>
+        /// Check if first matrix NOT equals second
+        /// </summary>
+        /// <param name="first">First matrix</param>
+        /// <param name="second">Second matrix</param>
+        public static bool operator !=(Matrix first, Matrix second)
+        {
+            return !first.Equals(second);
+        }
+        #endregion
+
+        #region ICloneable Members
+        /// <summary>
+        /// Create clone object of matrix
+        /// </summary>
+        /// <returns>Returns new matrix with exact copy of data as object</returns>
+        public object Clone()
+        {
+            Matrix clone = new Matrix(cols, rows);
+            clone.CopyDataFrom(this);
+            return clone;
+        }
+
+        /// <summary>
+        /// Create copy of matrix
+        /// </summary>
+        /// <returns>Returns new matrix with exact copy of data</returns>
+        public Matrix Copy()
+        {
+            return Clone() as Matrix;
+        }
+
+        #endregion
+
+        #region IEquatable<Matrix> Members
+        /// <summary>
+        /// Check if other matrix equals current
+        /// </summary>
+        /// <param name="other">Other matrix</param>
+        public bool Equals(Matrix other)
+        {
+            if (!EqualsByDimension(other))
+                return false;
+            double[,] odata = other.GetData();
+            int r, c;
+            for (r = 0; r < rows; r++)
+                for (c = 0; c < cols; c++)
+                    if (data[r, c] != odata[r, c])
+                        return false;
+            return true;
+        }
+        #endregion
+
+        #region ISerializable Members
+        /// <summary>
+        /// Get object data for serialization
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new System.ArgumentNullException("info is null");
+            info.AddValue("rows", rows);
+            info.AddValue("cols", cols);
+            int r, c;
+            for (r = 0; r < rows; r++)
+                for (c = 0; c < cols; c++)
+                    info.AddValue(r + "_" + c, data[r, c]);
+        }
+        #endregion
+
+        #region IXmlSerializable Members
+        /// <summary>
+        /// Returns XML Schema - null for Matrix
+        /// </summary>
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Read matrix data from XML reader
+        /// </summary>
+        /// <param name="reader">XML reader with matrix</param>
+        public void ReadXml(XmlReader reader)
+        {
+            rows = Int32.Parse(reader.GetAttribute("rows"));
+            cols = Int32.Parse(reader.GetAttribute("cols"));
+            if (rows <= 0 || cols <= 0)
+                throw new ArgumentException("Wrong cols or rows number");
+            data = new double[rows, cols];
+            int r, c;
+            for (r = 0; r < rows; r++)
+            {
+                reader.ReadToFollowing("r" + r);
+                for (c = 0; c < cols; c++)
+                {
+                    reader.MoveToAttribute("c" + c);
+                    data[r, c] = reader.ReadContentAsDouble();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write matrix to XML writer
+        /// </summary>
+        /// <param name="writer">XML writer</param>
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartAttribute("rows");
+            writer.WriteValue(rows);
+            writer.WriteEndAttribute();
+            writer.WriteStartAttribute("cols");
+            writer.WriteValue(cols);
+            writer.WriteEndAttribute();
+            int r, c;
+            for (r = 0; r < rows; r++)
+            {
+                writer.WriteStartElement("r" + r);
+                for (c = 0; c < cols; c++)
+                {
+                    writer.WriteStartAttribute("c" + c);
+                    writer.WriteValue(data[r, c]);
+                    writer.WriteEndAttribute();
+                }
+                writer.WriteEndElement();
+            }
+        }
+        #endregion
     }
 }
