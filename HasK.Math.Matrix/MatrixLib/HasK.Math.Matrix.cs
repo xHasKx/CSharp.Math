@@ -451,26 +451,6 @@ namespace HasK.Math
         {
             return first.Multiply(second);
         }
-
-        /// <summary>
-        /// Check if first matrix equals second
-        /// </summary>
-        /// <param name="first">First matrix</param>
-        /// <param name="second">Second matrix</param>
-        public static bool operator ==(Matrix first, Matrix second)
-        {
-            return first.Equals(second);
-        }
-
-        /// <summary>
-        /// Check if first matrix NOT equals second
-        /// </summary>
-        /// <param name="first">First matrix</param>
-        /// <param name="second">Second matrix</param>
-        public static bool operator !=(Matrix first, Matrix second)
-        {
-            return !first.Equals(second);
-        }
         #endregion
 
         #region ICloneable Members

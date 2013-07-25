@@ -38,7 +38,7 @@ namespace TestMatrixLib
             // Binary serialization check
             Console.WriteLine("Binary serialization result (file {0}):", fname);
             Console.WriteLine(G2.ToStringData());
-            Console.WriteLine("Equals to source: {0}", G == G2);
+            Console.WriteLine("Equals to source: {0}", G.Equals(G2));
             Console.WriteLine();
 
             // XML serialization
@@ -54,7 +54,7 @@ namespace TestMatrixLib
             // XML serialization check
             Console.WriteLine("XML serialization result (file {0}):", fname);
             Console.WriteLine(G2.ToStringData());
-            Console.WriteLine("Equals to source: {0}", G == G2);
+            Console.WriteLine("Equals to source: {0}", G.Equals(G2));
             Console.WriteLine();
 
             Console.WriteLine("Test math");
