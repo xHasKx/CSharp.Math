@@ -45,6 +45,9 @@ namespace HasK.Math
             this.data = null;
         }
 
+        /// <summary>
+        /// Constructor for binary serialization
+        /// </summary>
         protected Matrix(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
@@ -134,6 +137,8 @@ namespace HasK.Math
         /// <param name="other">Other matrix to compare</param>
         public bool EqualsByDimension(Matrix other)
         {
+            if (other == null)
+                throw new ArgumentNullException("Other matrix is null");
             if (rows != other.rows || cols != other.cols)
                 return false;
             return true;
@@ -145,6 +150,8 @@ namespace HasK.Math
         /// <param name="other">Other matrix</param>
         public bool AgreedWith(Matrix other)
         {
+            if (other == null)
+                throw new ArgumentNullException("Other matrix is null");
             return cols == other.Rows;
         }
         #endregion
@@ -208,6 +215,8 @@ namespace HasK.Math
         /// <param name="matrix">Other matrix - source of data</param>
         public void CopyDataFrom(Matrix other)
         {
+            if (other == null)
+                throw new ArgumentNullException("Other matrix is null");
             int r, c;
             int min_rows = System.Math.Min(rows, other.rows);
             int min_cols = System.Math.Min(cols, other.cols);
@@ -256,6 +265,8 @@ namespace HasK.Math
         /// <returns>Returns new matrix</returns>
         public Matrix AppendRight(Matrix other)
         {
+            if (other == null)
+                throw new ArgumentNullException("Other matrix is null");
             if (other.rows != rows)
                 throw new ArgumentException("Rows number of other matrix not equal current rows number");
             int scols = cols + other.cols, r, c;
@@ -278,6 +289,8 @@ namespace HasK.Math
         /// <returns>Returns new matrix</returns>
         public Matrix AppendDown(Matrix other)
         {
+            if (other == null)
+                throw new ArgumentNullException("Other matrix is null");
             if (other.cols != cols)
                 throw new ArgumentException("Cols number of other matrix not equal current cols number");
             int srows = rows + other.rows, r, c;
@@ -300,9 +313,11 @@ namespace HasK.Math
         /// <param name="items">Row items</param>
         public void SetRow(int row, params double[] items)
         {
-            int c;
+            if (items == null)
+                throw new ArgumentNullException("Items is null");
             if (items.Length != cols)
                 throw new ArgumentException("The number of input items differs from the cols number of matrix");
+            int c;
             for (c = 0; c < cols; c++)
                 data[row, c] = items[c];
         }
@@ -313,6 +328,8 @@ namespace HasK.Math
         /// <param name="items">Items to put to matrix</param>
         public void SetData(params double[] items)
         {
+            if (items == null)
+                throw new ArgumentNullException("Items is null");
             if (items.Length != rows*cols)
                 throw new ArgumentException("The number of input items differs from total data items of matrix");
             int r, c, pos = 0;
@@ -368,6 +385,8 @@ namespace HasK.Math
         /// <returns>Returns new result matrix</returns>
         public Matrix Add(Matrix other)
         {
+            if (other == null)
+                throw new ArgumentNullException("Other matrix is null");
             if (!EqualsByDimension(other))
                 throw new ArgumentException("Other matrix has different dimension");
             int c, r;
@@ -388,6 +407,10 @@ namespace HasK.Math
         /// <returns>Returns new result matrix</returns>
         public static Matrix operator +(Matrix first, Matrix second)
         {
+            if (first == null)
+                throw new ArgumentNullException("First matrix is null");
+            if (second == null)
+                throw new ArgumentNullException("Other matrix is null");
             return first.Add(second);
         }
 
@@ -415,6 +438,8 @@ namespace HasK.Math
         /// <returns>Returns new result matrix</returns>
         public static Matrix operator *(Matrix matrix, double value)
         {
+            if (matrix == null)
+                throw new ArgumentNullException("Matrix is null");
             return matrix.Multiply(value);
         }
 
@@ -425,6 +450,8 @@ namespace HasK.Math
         /// <returns>Returns new result matrix</returns>
         public Matrix Multiply(Matrix other)
         {
+            if (other == null)
+                throw new ArgumentNullException("Other matrix is null");
             double val;
             int ocols = other.cols, c, r, k;
             double[,] odata = other.GetData();
@@ -449,6 +476,10 @@ namespace HasK.Math
         /// <returns>Returns new result matrix</returns>
         public static Matrix operator *(Matrix first, Matrix second)
         {
+            if (first == null)
+                throw new ArgumentNullException("First matrix is null");
+            if (second == null)
+                throw new ArgumentNullException("Second matrix is null");
             return first.Multiply(second);
         }
         #endregion
@@ -473,7 +504,6 @@ namespace HasK.Math
         {
             return Clone() as Matrix;
         }
-
         #endregion
 
         #region IEquatable<Matrix> Members
@@ -483,6 +513,8 @@ namespace HasK.Math
         /// <param name="other">Other matrix</param>
         public bool Equals(Matrix other)
         {
+            if (other == null)
+                throw new NullReferenceException("Other matrix is null");
             if (!EqualsByDimension(other))
                 return false;
             double[,] odata = other.GetData();
@@ -505,7 +537,7 @@ namespace HasK.Math
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
-                throw new System.ArgumentNullException("info is null");
+                throw new ArgumentNullException("info is null");
             info.AddValue("rows", rows);
             info.AddValue("cols", cols);
             int r, c;
@@ -530,6 +562,8 @@ namespace HasK.Math
         /// <param name="reader">XML reader with matrix</param>
         public void ReadXml(XmlReader reader)
         {
+            if (reader == null)
+                throw new ArgumentNullException("Reader is null");
             rows = Int32.Parse(reader.GetAttribute("rows"));
             cols = Int32.Parse(reader.GetAttribute("cols"));
             if (rows <= 0 || cols <= 0)
@@ -553,6 +587,8 @@ namespace HasK.Math
         /// <param name="writer">XML writer</param>
         public void WriteXml(XmlWriter writer)
         {
+            if (writer == null)
+                throw new ArgumentNullException("Writer is null");
             writer.WriteStartAttribute("rows");
             writer.WriteValue(rows);
             writer.WriteEndAttribute();
