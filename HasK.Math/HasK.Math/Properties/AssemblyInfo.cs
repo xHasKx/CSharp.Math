@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HasK.Math.Matrix")]
+[assembly: AssemblyTitle("HasK.Math")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HasK.Math.Matrix")]
-[assembly: AssemblyCopyright("Copyright HasK©  2013")]
+[assembly: AssemblyProduct("HasK.Math")]
+[assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cb8c6b04-3561-48b8-9831-1716ba18d249")]
+[assembly: Guid("a0c75e46-0f9d-4a82-bf8c-c872d001ea1a")]
 
 // Version information for an assembly consists of the following four values:
 //

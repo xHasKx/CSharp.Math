@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HasK.Math", "HasK.Math\HasK.Math.csproj", "{0D194639-E45B-4E50-AF60-5C30001EF017}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{FCCBCD67-18B2-4D71-8906-64481D1CA48A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D194639-E45B-4E50-AF60-5C30001EF017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D194639-E45B-4E50-AF60-5C30001EF017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D194639-E45B-4E50-AF60-5C30001EF017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D194639-E45B-4E50-AF60-5C30001EF017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCCBCD67-18B2-4D71-8906-64481D1CA48A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCCBCD67-18B2-4D71-8906-64481D1CA48A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCCBCD67-18B2-4D71-8906-64481D1CA48A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCCBCD67-18B2-4D71-8906-64481D1CA48A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

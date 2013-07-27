@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HasK.Math;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using HasK.Math;
 
-namespace TestMatrixLib
+namespace Tests
 {
     class Program
     {
         static void Main(string[] args)
+        {
+            TestMatrix();
+
+            Console.ReadLine();
+        }
+
+        static void TestMatrix()
         {
             // Test serialization
             Console.WriteLine("Test serialization");
@@ -57,6 +64,7 @@ namespace TestMatrixLib
             Console.WriteLine("Equals to source: {0}", G.Equals(G2));
             Console.WriteLine();
 
+            // Test math
             Console.WriteLine("Test math");
             Matrix H = new Matrix(2, 5);
             H.SetData(
@@ -65,11 +73,9 @@ namespace TestMatrixLib
             Console.WriteLine("Matrix H:");
             Console.WriteLine(H.ToStringData());
 
-            Console.WriteLine("R = multiply G to transparent H:");
-            Matrix R = G * H.Transparent();
+            Console.WriteLine("R = multiply G to transpose H:");
+            Matrix R = G * H.Transpose();
             Console.WriteLine(R.ToStringData());
-
-            Console.ReadLine();
         }
     }
 }

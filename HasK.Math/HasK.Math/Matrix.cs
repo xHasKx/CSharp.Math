@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using System.Text;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using System.Xml.Serialization;
-using System.Xml;
-using System.Xml.Schema;
 
 namespace HasK.Math
 {
@@ -364,10 +363,10 @@ namespace HasK.Math
         }
 
         /// <summary>
-        /// Transparent current matrix
+        /// Transpose current matrix
         /// </summary>
         /// <returns>Returns new result matrix</returns>
-        public Matrix Transparent()
+        public Matrix Transpose()
         {
             Matrix res = new Matrix(cols, rows);
             double[,] newData = res.GetData();
