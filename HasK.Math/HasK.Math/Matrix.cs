@@ -6,7 +6,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace HasK.Math
+namespace HasK.Math.Matrix
 {
     /// <summary>
     /// Simple two-dimensional matrix with double items

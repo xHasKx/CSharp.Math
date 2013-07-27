@@ -5,7 +5,8 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
-using HasK.Math;
+using HasK.Math.Matrix;
+using HasK.Math.Graph;
 
 namespace Tests
 {
@@ -13,9 +14,22 @@ namespace Tests
     {
         static void Main(string[] args)
         {
-            TestMatrix();
+            // TestMatrix();
+            TestGraph();
 
             Console.ReadLine();
+        }
+
+        private static void TestGraph()
+        {
+            var G = new Graph("G");
+            G.AddVertex("A");
+            G.AddVertex("B");
+            G.AddVertex("C");
+
+            Console.WriteLine(G.AddLink("a", "A", "A"));
+
+            Console.WriteLine(G);
         }
 
         static void TestMatrix()
