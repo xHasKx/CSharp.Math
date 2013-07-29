@@ -23,11 +23,11 @@ namespace Tests
         private static void TestGraph()
         {
             var G = new Graph("G");
-            G.AddVertex("A");
-            G.AddVertex("B");
-            G.AddVertex("C");
+            G.AddVertex();
+            G.AddVertex();
+            G.AddVertex();
 
-            Console.WriteLine(G.AddLink("a", "A", "A"));
+            Console.WriteLine(G.AddLink("A", "B"));
 
             Console.WriteLine(G);
         }
