@@ -106,6 +106,10 @@ namespace HasK.Math.Graph
         /// Name of vertex
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Value of vertex
+        /// </summary>
+        public double Value { get; set; }
 
         /// <summary>
         /// Graph which owns this vertex
@@ -116,12 +120,28 @@ namespace HasK.Math.Graph
         {
             Graph = graph;
             Name = name;
+            Value = 0;
         }
 
         internal Vertex(Graph graph)
         {
             Graph = graph;
             Name = graph.GetNextName();
+            Value = 0;
+        }
+
+        internal Vertex(Graph graph, string name, double value)
+        {
+            Graph = graph;
+            Name = name;
+            Value = value;
+        }
+
+        internal Vertex(Graph graph, double value)
+        {
+            Graph = graph;
+            Name = graph.GetNextName();
+            Value = value;
         }
 
         public override string ToString()
@@ -136,6 +156,10 @@ namespace HasK.Math.Graph
         /// Name of link
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Value of link
+        /// </summary>
+        public double Value { get; set; }
 
         /// <summary>
         /// Graph which owns this link
@@ -151,6 +175,7 @@ namespace HasK.Math.Graph
             Name = name;
             From = from;
             To = to;
+            Value = 0;
         }
 
         internal Link(Graph graph, Vertex from, Vertex to)
@@ -159,6 +184,25 @@ namespace HasK.Math.Graph
             Name = graph.GetNextName(true);
             From = from;
             To = to;
+            Value = 0;
+        }
+
+        internal Link(Graph graph, string name, Vertex from, Vertex to, double value)
+        {
+            Graph = graph;
+            Name = name;
+            From = from;
+            To = to;
+            Value = value;
+        }
+
+        internal Link(Graph graph, Vertex from, Vertex to, double value)
+        {
+            Graph = graph;
+            Name = graph.GetNextName(true);
+            From = from;
+            To = to;
+            Value = value;
         }
 
         public override string ToString()
@@ -192,16 +236,29 @@ namespace HasK.Math.Graph
         }
 
         /// <summary>
-        /// Add new vertex with given name to graph
+        /// Checks if vertex with given name presented
         /// </summary>
-        /// <param name="name">Name of new vertex</param>
-        /// <returns>Returns created vertex</returns>
-        public Vertex AddVertex(string name)
+        /// <param name="name">Name of vertex to search</param>
+        /// <returns>Returns rrue if vertex found, otherwise false</returns>
+        public bool HasVertex(string name)
         {
             foreach (var vertex in vertices)
                 if (vertex.Name == name)
-                    throw new ArgumentException("Vertex with given name already exists in graph");
-            var v = new Vertex(this, name);
+                    return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Add new vertex with given name to graph
+        /// </summary>
+        /// <param name="name">Name of new vertex</param>
+        /// <param name="value">Value of new vertex</param>
+        /// <returns>Returns created vertex</returns>
+        public Vertex AddVertex(string name, double value)
+        {
+            if (HasVertex(name))
+                throw new ArgumentException("Vertex with given name already exists in graph");
+            var v = new Vertex(this, name, value);
             vertices.Add(v);
             return v;
         }
@@ -209,8 +266,9 @@ namespace HasK.Math.Graph
         /// <summary>
         /// Add new vertex with auto name to graph
         /// </summary>
+        /// <param name="value">Value of new vertex</param>
         /// <returns>Returns created vertex</returns>
-        public Vertex AddVertex()
+        public Vertex AddVertex(double value)
         {
             string name;
             while (true) {
@@ -220,10 +278,30 @@ namespace HasK.Math.Graph
                         continue;
                 break;
             }
-            var v = new Vertex(this, name);
+            var v = new Vertex(this, name, value);
             vertices.Add(v);
             return v;
         }
+
+        /// <summary>
+        /// Add new vertex with given name to graph
+        /// </summary>
+        /// <param name="name">Name of new vertex</param>
+        /// <returns>Returns created vertex</returns>
+        public Vertex AddVertex(string name)
+        {
+            return AddVertex(name, 0);
+        }
+
+        /// <summary>
+        /// Add new vertex with auto name to graph
+        /// </summary>
+        /// <returns>Returns created vertex</returns>
+        public Vertex AddVertex()
+        {
+            return AddVertex(0);
+        }
+
         /// <summary>
         /// Get all vertices of graph
         /// </summary>
@@ -271,6 +349,22 @@ namespace HasK.Math.Graph
             return false;
         }
 
+        /// <summary>
+        /// Returns next available link name
+        /// </summary>
+        private string GetNextLinkName()
+        {
+            string name;
+            while (true)
+            {
+                name = this.GetNextName(true);
+                foreach (var link in links)
+                    if (link.Name == name)
+                        continue;
+                break;
+            }
+            return name;
+        }
 
         /// <summary>
         /// Add new link to graph between two vertices
@@ -278,8 +372,9 @@ namespace HasK.Math.Graph
         /// <param name="name">Name of new link</param>
         /// <param name="from">Start vertice of link</param>
         /// <param name="to">End vertice of link</param>
+        /// <param name="value">Value of link</param>
         /// <returns>Returns new link</returns>
-        public Link AddLink(string name, Vertex from, Vertex to)
+        public Link AddLink(string name, Vertex from, Vertex to, double value)
         {
             foreach (var link in links)
                 if (link.Name == name)
@@ -290,7 +385,7 @@ namespace HasK.Math.Graph
                 throw new ArgumentException("To-vertice not presented in graph");
             if (from == to)
                 throw new ArgumentException("Cannot create link to from-vertex");
-            var l = new Link(this, name, from, to);
+            var l = new Link(this, name, from, to, value);
             links.Add(l);
             return l;
         }
@@ -300,25 +395,17 @@ namespace HasK.Math.Graph
         /// </summary>
         /// <param name="from">Start vertice of link</param>
         /// <param name="to">End vertice of link</param>
+        /// <param name="value">Value of link</param>
         /// <returns>Returns new link</returns>
-        public Link AddLink(Vertex from, Vertex to)
+        public Link AddLink(Vertex from, Vertex to, double value)
         {
-            string name;
-            while (true)
-            {
-                name = this.GetNextName(true);
-                foreach (var link in links)
-                    if (link.Name == name)
-                        continue;
-                break;
-            }
             if (from.Graph != this)
                 throw new ArgumentException("From-vertice not presented in graph");
             if (to.Graph != this)
                 throw new ArgumentException("To-vertice not presented in graph");
             if (from == to)
                 throw new ArgumentException("Cannot create link to from-vertex");
-            var l = new Link(this, name, from, to);
+            var l = new Link(this, GetNextLinkName(), from, to, value);
             links.Add(l);
             return l;
         }
@@ -329,8 +416,9 @@ namespace HasK.Math.Graph
         /// <param name="name">Name of new link</param>
         /// <param name="from">Name of from-vertice of link</param>
         /// <param name="to">Name of to-vertice of link</param>
+        /// <param name="value">Value of link</param>
         /// <returns>Returns new link</returns>
-        public Link AddLink(string name, string from, string to)
+        public Link AddLink(string name, string from, string to, double value)
         {
             var vfrom = GetVertex(from);
             if (vfrom == null)
@@ -338,7 +426,30 @@ namespace HasK.Math.Graph
             var vto = GetVertex(to);
             if (vto == null)
                 throw new ArgumentException("To-vertice with given name not exists in graph");
-            return AddLink(name, vfrom, vto);
+            return AddLink(name, vfrom, vto, value);
+        }
+
+        /// <summary>
+        /// Add new link to graph between two vertices
+        /// </summary>
+        /// <param name="from">Name of from-vertice of link</param>
+        /// <param name="to">Name of to-vertice of link</param>
+        /// <param name="value">Value of link</param>
+        /// <returns>Returns new link</returns>
+        public Link AddLink(string from, string to, double value)
+        {
+            return AddLink(GetNextLinkName(), from, to, value);
+        }
+
+        /// <summary>
+        /// Add new link to graph between two vertices
+        /// </summary>
+        /// <param name="from">Start vertice of link</param>
+        /// <param name="to">End vertice of link</param>
+        /// <returns>Returns new link</returns>
+        public Link AddLink(Vertex from, Vertex to)
+        {
+            return AddLink(from, to, 0);
         }
 
         /// <summary>
@@ -349,17 +460,9 @@ namespace HasK.Math.Graph
         /// <returns>Returns new link</returns>
         public Link AddLink(string from, string to)
         {
-            string name;
-            while (true)
-            {
-                name = this.GetNextName(true);
-                foreach (var link in links)
-                    if (link.Name == name)
-                        continue;
-                break;
-            }
-            return AddLink(name, from, to);
+            return AddLink(from, to, 0);
         }
+
         /// <summary>
         /// Get all links of graph
         /// </summary>
