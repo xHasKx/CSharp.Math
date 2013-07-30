@@ -1,0 +1,558 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HasK.Math</name>
+    </assembly>
+    <members>
+        <member name="F:HasK.Math.Graph.AutoNameManager.FirstBigChar">
+            <summary>
+            First possible char of big name
+            </summary>
+        </member>
+        <member name="F:HasK.Math.Graph.AutoNameManager.LastBigChar">
+            <summary>
+            Last possible char of big name
+            </summary>
+        </member>
+        <member name="F:HasK.Math.Graph.AutoNameManager.FirstSmallChar">
+            <summary>
+            First possible char of small name
+            </summary>
+        </member>
+        <member name="F:HasK.Math.Graph.AutoNameManager.LastSmallChar">
+            <summary>
+            Last possible char of small name
+            </summary>
+        </member>
+        <member name="F:HasK.Math.Graph.AutoNameManager.BigName">
+            <summary>
+            Current big name
+            </summary>
+        </member>
+        <member name="F:HasK.Math.Graph.AutoNameManager.SmallName">
+            <summary>
+            Current small name
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Graph.AutoNameManager.GetNext(System.String,System.Char,System.Char)">
+            <summary>
+            Generate next name for current in specified chars range
+            </summary>
+            <param name="current">Current name</param>
+            <param name="first">First char in name rnange</param>
+            <param name="last">Last char in name range</param>
+            <returns>Returns next name for given current name</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.AutoNameManager.PeekNextName(System.Boolean)">
+            <summary>
+            Generate next name without saving it
+            </summary>
+            <param name="small">Determine if name should be in small letters</param>
+            <returns>Returns next name without saving it</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.AutoNameManager.GetNextName(System.Boolean)">
+            <summary>
+            Generate and save next name
+            </summary>
+            <param name="small">Determine if name should be in small letters</param>
+            <returns>Returns next name</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.AutoNameManager.GetNextName">
+            <summary>
+            Generate and save next big name
+            </summary>
+            <returns>Returns next big name</returns>
+        </member>
+        <member name="P:HasK.Math.Graph.Vertex.Name">
+            <summary>
+            Name of vertex
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Graph.Vertex.Value">
+            <summary>
+            Value of vertex
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Graph.Vertex.Graph">
+            <summary>
+            Graph which owns this vertex
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Graph.Link.Name">
+            <summary>
+            Name of link
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Graph.Link.Value">
+            <summary>
+            Value of link
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Graph.Link.Graph">
+            <summary>
+            Graph which owns this link
+            </summary>
+        </member>
+        <member name="T:HasK.Math.Graph.Graph">
+            <summary>
+            Math graph - list of vertices and links between it
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.HasVertex(System.String)">
+            <summary>
+            Checks if vertex with given name presented
+            </summary>
+            <param name="name">Name of vertex to search</param>
+            <returns>Returns rrue if vertex found, otherwise false</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddVertex(System.String,System.Double)">
+            <summary>
+            Add new vertex with given name to graph
+            </summary>
+            <param name="name">Name of new vertex</param>
+            <param name="value">Value of new vertex</param>
+            <returns>Returns created vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddVertex(System.Double)">
+            <summary>
+            Add new vertex with auto name to graph
+            </summary>
+            <param name="value">Value of new vertex</param>
+            <returns>Returns created vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddVertex(System.String)">
+            <summary>
+            Add new vertex with given name to graph
+            </summary>
+            <param name="name">Name of new vertex</param>
+            <returns>Returns created vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddVertex">
+            <summary>
+            Add new vertex with auto name to graph
+            </summary>
+            <returns>Returns created vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertices">
+            <summary>
+            Get all vertices of graph
+            </summary>
+            <returns>Returns array of vertices</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertex(System.String)">
+            <summary>
+            Get vertex by name
+            </summary>
+            <param name="name">Name of vertex</param>
+            <returns>Returns vertex with given name or null if not found</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.RemoveVertex(HasK.Math.Graph.Vertex)">
+            <summary>
+            Remove vertex from graph
+            </summary>
+            <param name="vertex">Vertex to remove</param>
+            <returns>Returns true if successfully removed</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.RemoveVertex(System.String)">
+            <summary>
+            Remove vertex by name
+            </summary>
+            <param name="name">Name of vertex</param>
+            <returns>Returns true if successfully removed</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetNextLinkName">
+            <summary>
+            Returns next available link name
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddLink(System.String,HasK.Math.Graph.Vertex,HasK.Math.Graph.Vertex,System.Double)">
+            <summary>
+            Add new link to graph between two vertices
+            </summary>
+            <param name="name">Name of new link</param>
+            <param name="from">Start vertice of link</param>
+            <param name="to">End vertice of link</param>
+            <param name="value">Value of link</param>
+            <returns>Returns new link</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddLink(HasK.Math.Graph.Vertex,HasK.Math.Graph.Vertex,System.Double)">
+            <summary>
+            Add new link to graph between two vertices
+            </summary>
+            <param name="from">Start vertice of link</param>
+            <param name="to">End vertice of link</param>
+            <param name="value">Value of link</param>
+            <returns>Returns new link</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddLink(System.String,System.String,System.String,System.Double)">
+            <summary>
+            Add new link to graph between two vertices
+            </summary>
+            <param name="name">Name of new link</param>
+            <param name="from">Name of from-vertice of link</param>
+            <param name="to">Name of to-vertice of link</param>
+            <param name="value">Value of link</param>
+            <returns>Returns new link</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddLink(System.String,System.String,System.Double)">
+            <summary>
+            Add new link to graph between two vertices
+            </summary>
+            <param name="from">Name of from-vertice of link</param>
+            <param name="to">Name of to-vertice of link</param>
+            <param name="value">Value of link</param>
+            <returns>Returns new link</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddLink(HasK.Math.Graph.Vertex,HasK.Math.Graph.Vertex)">
+            <summary>
+            Add new link to graph between two vertices
+            </summary>
+            <param name="from">Start vertice of link</param>
+            <param name="to">End vertice of link</param>
+            <returns>Returns new link</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.AddLink(System.String,System.String)">
+            <summary>
+            Add new link to graph between two vertices
+            </summary>
+            <param name="from">Name of from-vertice of link</param>
+            <param name="to">Name of to-vertice of link</param>
+            <returns>Returns new link</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinks">
+            <summary>
+            Get all links of graph
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLink(System.String)">
+            <summary>
+            Get link by name
+            </summary>
+            <param name="name">Name of link</param>
+            <returns>Returns link with given name or null if not found</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVerticesByValue(System.Double)">
+            <summary>
+            Get vertices with given value
+            </summary>
+            <param name="value">Value of vertices to search</param>
+            <returns>Returns array of vertices with given value</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinksByValue(System.Double)">
+            <summary>
+            Get links with given value
+            </summary>
+            <param name="value">Value of links to search</param>
+            <returns>Returns array of links with given value</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.RemoveLink(HasK.Math.Graph.Link)">
+            <summary>
+            Remove link from graph
+            </summary>
+            <param name="link">Link to remove</param>
+            <returns>Returns true if successfully removed</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.RemoveLink(System.String)">
+            <summary>
+            Remove link by name
+            </summary>
+            <param name="name">Name of link</param>
+            <returns>Returns true if successfully removed</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertexFromLinks(HasK.Math.Graph.Vertex)">
+            <summary>
+            Get links from given vertex
+            </summary>
+            <param name="vertex">Vertex to find links</param>
+            <returns>Returns array of links from given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertexFromLinks(System.String)">
+            <summary>
+            Get links from given vertex
+            </summary>
+            <param name="vertex">Vertex name to find links</param>
+            <returns>Returns array of links from given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertexToLinks(HasK.Math.Graph.Vertex)">
+            <summary>
+            Get links to given vertex
+            </summary>
+            <param name="vertex">Vertex to find links</param>
+            <returns>Returns array of links to given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertexToLinks(System.String)">
+            <summary>
+            Get links to given vertex
+            </summary>
+            <param name="vertex">Vertex name to find links</param>
+            <returns>Returns array of links to given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertexLinks(HasK.Math.Graph.Vertex)">
+            <summary>
+            Get links from and to given vertex
+            </summary>
+            <param name="vertex">Vertex to find links</param>
+            <returns>Returns array of links from and to given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetVertexLinks(System.String)">
+            <summary>
+            Get links from and to given vertex
+            </summary>
+            <param name="name">Vertex name to find links</param>
+            <returns>Returns array of links from and to given vertex</returns>
+        </member>
+        <member name="P:HasK.Math.Graph.Graph.Name">
+            <summary>
+            Name of graph
+            </summary>
+        </member>
+        <member name="T:HasK.Math.Matrix.Matrix">
+            <summary>
+            Simple two-dimensional matrix with double items
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.#ctor">
+            <summary>
+            Create empty matrix with zero size - for serialization
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor for binary serialization
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Create new matrix with specified size
+            </summary>
+            <param name="rows">Rows of matrix</param>
+            <param name="cols">Columns of matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.ToStringData(System.String)">
+            <summary>
+            Returns data in matrix as string
+            </summary>
+            <param name="sep">Separator string between elements</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.ToStringData">
+            <summary>
+            Returns data in matrix as string
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.ToString">
+            <summary>
+            Returns string representation of matrix
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.EqualsByDimension(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Check if this matrix is equals other matrix dimension
+            </summary>
+            <param name="other">Other matrix to compare</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.AgreedWith(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Check if this matrix agreed with other matrix
+            </summary>
+            <param name="other">Other matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.GetData">
+            <summary>
+            Returns array with data in matrix
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Get(System.Int32,System.Int32)">
+            <summary>
+            Returns value in specified cell of matrix
+            </summary>
+            <param name="row">Row of cell</param>
+            <param name="col">Column of cell</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Set(System.Int32,System.Int32,System.Double)">
+            <summary>
+            Set value in specified matrix cell
+            </summary>
+            <param name="row">Row of cell</param>
+            <param name="col">Column of cell</param>
+            <param name="value">New value of cell</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.SetAll(System.Double)">
+            <summary>
+            Set all cells of matrix to specified value
+            </summary>
+            <param name="value">Value for each cell in matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.CopyDataFrom(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Copy data from another matrix
+            </summary>
+            <param name="matrix">Other matrix - source of data</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.ExchangeRows(System.Int32,System.Int32)">
+            <summary>
+            Exchange two rows of matrix
+            </summary>
+            <param name="row1">First row</param>
+            <param name="row2">Second row</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.ExchangeColumns(System.Int32,System.Int32)">
+            <summary>
+            Exchange two columns of matrix
+            </summary>
+            <param name="col1">First column</param>
+            <param name="col2">Second column</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.AppendRight(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Append other matrix to the right of the current
+            </summary>
+            <param name="other">Other matrix</param>
+            <returns>Returns new matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.AppendDown(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Append other matrix to the bottom of the current
+            </summary>
+            <param name="other">Other matrix</param>
+            <returns>Returns new matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.SetRow(System.Int32,System.Double[])">
+            <summary>
+            Set given row in matrix data
+            </summary>
+            <param name="row">Row number</param>
+            <param name="items">Row items</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.SetData(System.Double[])">
+            <summary>
+            Set all items in matrix to specified values
+            </summary>
+            <param name="items">Items to put to matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Identity(System.Int32,System.Double)">
+            <summary>
+            Returns new identity matrix
+            </summary>
+            <param name="size">Dimension of matrix</param>
+            <param name="value">Value on main diagonal of matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Identity(System.Int32)">
+            <summary>
+            Returns new identity matrix
+            </summary>
+            <param name="size">Dimension of matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Transpose">
+            <summary>
+            Transpose current matrix
+            </summary>
+            <returns>Returns new result matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Add(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Add other matrix to current
+            </summary>
+            <param name="other">Other matrix</param>
+            <returns>Returns new result matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.op_Addition(HasK.Math.Matrix.Matrix,HasK.Math.Matrix.Matrix)">
+            <summary>
+            Add second matrix to first
+            </summary>
+            <param name="first">First matrix</param>
+            <param name="second">Second matrix</param>
+            <returns>Returns new result matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Multiply(System.Double)">
+            <summary>
+            Multiplies matrix by scalar value
+            </summary>
+            <param name="value">Multiplier value</param>
+            <returns>Returns new result matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.op_Multiply(HasK.Math.Matrix.Matrix,System.Double)">
+            <summary>
+            Multiplies matrix by scalar value
+            </summary>
+            <param name="matrix">Matrix</param>
+            <param name="value">Multiplier value</param>
+            <returns>Returns new result matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Multiply(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Multiply matrix by other matrix
+            </summary>
+            <param name="other">Multiplier matrix</param>
+            <returns>Returns new result matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.op_Multiply(HasK.Math.Matrix.Matrix,HasK.Math.Matrix.Matrix)">
+            <summary>
+            Multiply first matrix by second matrix
+            </summary>
+            <param name="first">First matrix</param>
+            <param name="second">Second matrix</param>
+            <returns>Returns new result matrix</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Clone">
+            <summary>
+            Create clone object of matrix
+            </summary>
+            <returns>Returns new matrix with exact copy of data as object</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Copy">
+            <summary>
+            Create copy of matrix
+            </summary>
+            <returns>Returns new matrix with exact copy of data</returns>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.Equals(HasK.Math.Matrix.Matrix)">
+            <summary>
+            Check if other matrix equals current
+            </summary>
+            <param name="other">Other matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Get object data for serialization
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.GetSchema">
+            <summary>
+            Returns XML Schema - null for Matrix
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.ReadXml(System.Xml.XmlReader)">
+            <summary>
+            Read matrix data from XML reader
+            </summary>
+            <param name="reader">XML reader with matrix</param>
+        </member>
+        <member name="M:HasK.Math.Matrix.Matrix.WriteXml(System.Xml.XmlWriter)">
+            <summary>
+            Write matrix to XML writer
+            </summary>
+            <param name="writer">XML writer</param>
+        </member>
+        <member name="P:HasK.Math.Matrix.Matrix.Rows">
+            <summary>
+            Rows count of matrix
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Matrix.Matrix.Cols">
+            <summary>
+            Columns count of matrix
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Matrix.Matrix.Item(System.Int32,System.Int32)">
+            <summary>
+            Returns cell value by specified row and column
+            </summary>
+            <param name="row">Row of cell</param>
+            <param name="col">Column of cell</param>
+        </member>
+    </members>
+</doc>

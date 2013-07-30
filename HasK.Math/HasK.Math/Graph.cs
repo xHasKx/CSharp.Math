@@ -257,7 +257,7 @@ namespace HasK.Math.Graph
         public Vertex AddVertex(string name, double value)
         {
             if (HasVertex(name))
-                throw new ArgumentException("Vertex with given name already exists in graph");
+                throw new ArgumentException("Vertex with given name already presented in graph");
             var v = new Vertex(this, name, value);
             vertices.Add(v);
             return v;
@@ -378,7 +378,7 @@ namespace HasK.Math.Graph
         {
             foreach (var link in links)
                 if (link.Name == name)
-                    throw new ArgumentException("Link with given name already exists in graph");
+                    throw new ArgumentException("Link with given name already presented in graph");
             if (from.Graph != this)
                 throw new ArgumentException("From-vertice not presented in graph");
             if (to.Graph != this)
@@ -422,10 +422,10 @@ namespace HasK.Math.Graph
         {
             var vfrom = GetVertex(from);
             if (vfrom == null)
-                throw new ArgumentException("From-vertice with given name not exists in graph");
+                throw new ArgumentException("From-vertice with given name not presented in graph");
             var vto = GetVertex(to);
             if (vto == null)
-                throw new ArgumentException("To-vertice with given name not exists in graph");
+                throw new ArgumentException("To-vertice with given name not presented in graph");
             return AddLink(name, vfrom, vto, value);
         }
 
@@ -486,6 +486,34 @@ namespace HasK.Math.Graph
         }
 
         /// <summary>
+        /// Get vertices with given value
+        /// </summary>
+        /// <param name="value">Value of vertices to search</param>
+        /// <returns>Returns array of vertices with given value</returns>
+        public Vertex[] GetVerticesByValue(double value)
+        {
+            var found = new List<Vertex>();
+            foreach (var vertex in vertices)
+                if (vertex.Value == value)
+                    found.Add(vertex);
+            return found.ToArray();
+        }
+
+        /// <summary>
+        /// Get links with given value
+        /// </summary>
+        /// <param name="value">Value of links to search</param>
+        /// <returns>Returns array of links with given value</returns>
+        public Link[] GetLinksByValue(double value)
+        {
+            var found = new List<Link>();
+            foreach (var link in links)
+                if (link.Value == value)
+                    found.Add(link);
+            return found.ToArray();
+        }
+
+        /// <summary>
         /// Remove link from graph
         /// </summary>
         /// <param name="link">Link to remove</param>
@@ -531,7 +559,7 @@ namespace HasK.Math.Graph
         {
             var vertex = GetVertex(name);
             if (vertex == null)
-                throw new ArgumentException("Vertex with given name not exists in graph");
+                throw new ArgumentException("Vertex with given name not presented in graph");
             return GetVertexFromLinks(vertex);
         }
 
@@ -558,7 +586,7 @@ namespace HasK.Math.Graph
         {
             var vertex = GetVertex(name);
             if (vertex == null)
-                throw new ArgumentException("Vertex with given name not exists in graph");
+                throw new ArgumentException("Vertex with given name not presented in graph");
             return GetVertexToLinks(vertex);
         }
 
@@ -585,7 +613,7 @@ namespace HasK.Math.Graph
         {
             var vertex = GetVertex(name);
             if (vertex == null)
-                throw new ArgumentException("Vertex with given name not exists in graph");
+                throw new ArgumentException("Vertex with given name not presented in graph");
             return GetVertexLinks(vertex);
         }
 
