@@ -122,7 +122,6 @@ namespace HasK.Math.Matrix
         /// <summary>
         /// Returns string representation of matrix
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             return String.Format("<Matrix {0}x{1}>", rows, cols);
@@ -211,7 +210,7 @@ namespace HasK.Math.Matrix
         /// <summary>
         /// Copy data from another matrix
         /// </summary>
-        /// <param name="matrix">Other matrix - source of data</param>
+        /// <param name="other">Other matrix - source of data</param>
         public void CopyDataFrom(Matrix other)
         {
             if (other == null)

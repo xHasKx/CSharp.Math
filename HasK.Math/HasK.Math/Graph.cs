@@ -9,6 +9,9 @@ using System.Security.Permissions;
 
 namespace HasK.Math.Graph
 {
+    /// <summary>
+    /// Represent class of objects which can auto name itself
+    /// </summary>
     public class AutoNameManager
     {
         /// <summary>
@@ -100,6 +103,9 @@ namespace HasK.Math.Graph
         }
     }
 
+    /// <summary>
+    /// Represent one vertex of graph
+    /// </summary>
     public class Vertex
     {
         /// <summary>
@@ -144,12 +150,18 @@ namespace HasK.Math.Graph
             Value = value;
         }
 
+        /// <summary>
+        /// Vertex string representation
+        /// </summary>
         public override string ToString()
         {
             return String.Format("<Vertex '{0}' of {1}>", Name, Graph);
         }
     }
 
+    /// <summary>
+    /// Represent one link of graph between two vertices
+    /// </summary>
     public class Link
     {
         /// <summary>
@@ -166,7 +178,14 @@ namespace HasK.Math.Graph
         /// </summary>
         public Graph Graph { get; private set; }
 
+        /// <summary>
+        /// From-vertex of link
+        /// </summary>
         public Vertex From { get; private set; }
+
+        /// <summary>
+        /// To-vertex of link
+        /// </summary>
         public Vertex To { get; private set; }
 
         internal Link(Graph graph, string name, Vertex from, Vertex to)
@@ -205,6 +224,9 @@ namespace HasK.Math.Graph
             Value = value;
         }
 
+        /// <summary>
+        /// String representation of link
+        /// </summary>
         public override string ToString()
         {
             return String.Format("<Link '{0}' of {1}>", Name, Graph);
@@ -221,18 +243,52 @@ namespace HasK.Math.Graph
         /// Name of graph
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Indicates is that graph is undirected
+        /// </summary>
+        public bool Undirected { get; set; }
 
         private List<Vertex> vertices = new List<Vertex>();
         private List<Link> links = new List<Link>();
 
+        /// <summary>
+        /// Create new graph with given name and undirected attribute
+        /// </summary>
+        /// <param name="name">Name of graph</param>
+        /// <param name="undirected">Undirected attribute</param>
+        public Graph(string name, bool undirected)
+        {
+            Name = name;
+            Undirected = undirected;
+        }
+
+        /// <summary>
+        /// Create new undirected graph with given name
+        /// </summary>
+        /// <param name="name"></param>
         public Graph(string name)
         {
             Name = name;
+            Undirected = false;
         }
 
+        /// <summary>
+        /// Create new graph with auto name and undirected attribyte
+        /// </summary>
+        /// <param name="undirected">Undirected attribute</param>
+        public Graph(bool undirected)
+        {
+            Name = this.GetNextName();
+            Undirected = undirected;
+        }
+
+        /// <summary>
+        /// Create new directed graph with auto name
+        /// </summary>
         public Graph()
         {
             Name = this.GetNextName();
+            Undirected = false;
         }
 
         /// <summary>
@@ -385,6 +441,11 @@ namespace HasK.Math.Graph
                 throw new ArgumentException("To-vertice not presented in graph");
             if (from == to)
                 throw new ArgumentException("Cannot create link to from-vertex");
+            if (Undirected)
+                // check if link to-from already presented
+                foreach (var link in links)
+                    if (link.From == to && link.To == from)
+                        return null;
             var l = new Link(this, name, from, to, value);
             links.Add(l);
             return l;
@@ -399,15 +460,7 @@ namespace HasK.Math.Graph
         /// <returns>Returns new link</returns>
         public Link AddLink(Vertex from, Vertex to, double value)
         {
-            if (from.Graph != this)
-                throw new ArgumentException("From-vertice not presented in graph");
-            if (to.Graph != this)
-                throw new ArgumentException("To-vertice not presented in graph");
-            if (from == to)
-                throw new ArgumentException("Cannot create link to from-vertex");
-            var l = new Link(this, GetNextLinkName(), from, to, value);
-            links.Add(l);
-            return l;
+            return AddLink(GetNextLinkName(), from, to, value);
         }
 
         /// <summary>
@@ -466,7 +519,6 @@ namespace HasK.Math.Graph
         /// <summary>
         /// Get all links of graph
         /// </summary>
-        /// <returns></returns>
         public Link[] GetLinks()
         {
             return links.ToArray();
@@ -553,7 +605,7 @@ namespace HasK.Math.Graph
         /// <summary>
         /// Get links from given vertex
         /// </summary>
-        /// <param name="vertex">Vertex name to find links</param>
+        /// <param name="name">Vertex name to find links</param>
         /// <returns>Returns array of links from given vertex</returns>
         public Link[] GetVertexFromLinks(string name)
         {
@@ -580,7 +632,7 @@ namespace HasK.Math.Graph
         /// <summary>
         /// Get links to given vertex
         /// </summary>
-        /// <param name="vertex">Vertex name to find links</param>
+        /// <param name="name">Vertex name to find links</param>
         /// <returns>Returns array of links to given vertex</returns>
         public Link[] GetVertexToLinks(string name)
         {
@@ -617,6 +669,9 @@ namespace HasK.Math.Graph
             return GetVertexLinks(vertex);
         }
 
+        /// <summary>
+        /// String representation of graph
+        /// </summary>
         public override string ToString()
         {
             return String.Format("<Graph '{0}'>", Name);

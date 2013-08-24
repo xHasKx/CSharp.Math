@@ -4,6 +4,11 @@
         <name>HasK.Math</name>
     </assembly>
     <members>
+        <member name="T:HasK.Math.Graph.AutoNameManager">
+            <summary>
+            Represent class of objects which can auto name itself
+            </summary>
+        </member>
         <member name="F:HasK.Math.Graph.AutoNameManager.FirstBigChar">
             <summary>
             First possible char of big name
@@ -63,6 +68,16 @@
             </summary>
             <returns>Returns next big name</returns>
         </member>
+        <member name="T:HasK.Math.Graph.Vertex">
+            <summary>
+            Represent one vertex of graph
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Graph.Vertex.ToString">
+            <summary>
+            Vertex string representation
+            </summary>
+        </member>
         <member name="P:HasK.Math.Graph.Vertex.Name">
             <summary>
             Name of vertex
@@ -76,6 +91,16 @@
         <member name="P:HasK.Math.Graph.Vertex.Graph">
             <summary>
             Graph which owns this vertex
+            </summary>
+        </member>
+        <member name="T:HasK.Math.Graph.Link">
+            <summary>
+            Represent one link of graph between two vertices
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Graph.Link.ToString">
+            <summary>
+            String representation of link
             </summary>
         </member>
         <member name="P:HasK.Math.Graph.Link.Name">
@@ -93,9 +118,43 @@
             Graph which owns this link
             </summary>
         </member>
+        <member name="P:HasK.Math.Graph.Link.From">
+            <summary>
+            From-vertex of link
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Graph.Link.To">
+            <summary>
+            To-vertex of link
+            </summary>
+        </member>
         <member name="T:HasK.Math.Graph.Graph">
             <summary>
             Math graph - list of vertices and links between it
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.#ctor(System.String,System.Boolean)">
+            <summary>
+            Create new graph with given name and undirected attribute
+            </summary>
+            <param name="name">Name of graph</param>
+            <param name="undirected">Undirected attribute</param>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.#ctor(System.String)">
+            <summary>
+            Create new undirected graph with given name
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.#ctor(System.Boolean)">
+            <summary>
+            Create new graph with auto name and undirected attribyte
+            </summary>
+            <param name="undirected">Undirected attribute</param>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.#ctor">
+            <summary>
+            Create new directed graph with auto name
             </summary>
         </member>
         <member name="M:HasK.Math.Graph.Graph.HasVertex(System.String)">
@@ -223,7 +282,6 @@
             <summary>
             Get all links of graph
             </summary>
-            <returns></returns>
         </member>
         <member name="M:HasK.Math.Graph.Graph.GetLink(System.String)">
             <summary>
@@ -271,7 +329,7 @@
             <summary>
             Get links from given vertex
             </summary>
-            <param name="vertex">Vertex name to find links</param>
+            <param name="name">Vertex name to find links</param>
             <returns>Returns array of links from given vertex</returns>
         </member>
         <member name="M:HasK.Math.Graph.Graph.GetVertexToLinks(HasK.Math.Graph.Vertex)">
@@ -285,7 +343,7 @@
             <summary>
             Get links to given vertex
             </summary>
-            <param name="vertex">Vertex name to find links</param>
+            <param name="name">Vertex name to find links</param>
             <returns>Returns array of links to given vertex</returns>
         </member>
         <member name="M:HasK.Math.Graph.Graph.GetVertexLinks(HasK.Math.Graph.Vertex)">
@@ -302,9 +360,19 @@
             <param name="name">Vertex name to find links</param>
             <returns>Returns array of links from and to given vertex</returns>
         </member>
+        <member name="M:HasK.Math.Graph.Graph.ToString">
+            <summary>
+            String representation of graph
+            </summary>
+        </member>
         <member name="P:HasK.Math.Graph.Graph.Name">
             <summary>
             Name of graph
+            </summary>
+        </member>
+        <member name="P:HasK.Math.Graph.Graph.Undirected">
+            <summary>
+            Indicates is that graph is undirected
             </summary>
         </member>
         <member name="T:HasK.Math.Matrix.Matrix">
@@ -344,7 +412,6 @@
             <summary>
             Returns string representation of matrix
             </summary>
-            <returns></returns>
         </member>
         <member name="M:HasK.Math.Matrix.Matrix.EqualsByDimension(HasK.Math.Matrix.Matrix)">
             <summary>
@@ -388,7 +455,7 @@
             <summary>
             Copy data from another matrix
             </summary>
-            <param name="matrix">Other matrix - source of data</param>
+            <param name="other">Other matrix - source of data</param>
         </member>
         <member name="M:HasK.Math.Matrix.Matrix.ExchangeRows(System.Int32,System.Int32)">
             <summary>
