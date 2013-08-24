@@ -237,7 +237,7 @@ namespace HasK.Math.Graph
     /// <summary>
     /// Math graph - list of vertices and links between it
     /// </summary>
-    public class Graph: AutoNameManager
+    public class Graph: AutoNameManager, ICloneable, IEquatable<Graph>
     {
         /// <summary>
         /// Name of graph
@@ -290,6 +290,8 @@ namespace HasK.Math.Graph
             Name = this.GetNextName();
             Undirected = false;
         }
+
+        
 
         /// <summary>
         /// Checks if vertex with given name presented
@@ -679,5 +681,47 @@ namespace HasK.Math.Graph
         {
             return String.Format("<Graph '{0}'>", Name);
         }
+
+        #region ICloneable Members
+        /// <summary>
+        /// Returns copy of graph
+        /// </summary>
+        /// <returns>Returns new graph, copy of this</returns>
+        public object Clone()
+        {
+            var clone = new Graph(Name, Undirected);
+            foreach (var v in vertices)
+                clone.AddVertex(v.Name, v.Value);
+            foreach (var l in links)
+                clone.AddLink(l.Name, l.From.Name, l.To.Name, l.Value);
+            return clone;
+        }
+        #endregion
+
+        #region IEquatable<Graph> Members
+        /// <summary>
+        /// Check if that graph equals other by structure (names can be different)
+        /// </summary>
+        /// <param name="other">Other graph to equality check</param>
+        /// <returns>Returns true if other graph equals this by structure</returns>
+        public bool Equals(Graph other)
+        {
+            if (other.vertices.Count != vertices.Count)
+                return false;
+            if (other.links.Count != links.Count)
+                return false;
+            for (int i = 0; i < vertices.Count; i++)
+                if (other.vertices[i].Value != vertices[i].Value)
+                    return false;
+            for (int i = 0; i < links.Count; i++)
+            {
+                var ol = other.links[i];
+                var l = links[i];
+                if (ol.From != l.From || ol.To != l.To || ol.Value != l.Value)
+                    return false;
+            }
+            return true;
+        }
+        #endregion
     }
 }

@@ -365,6 +365,19 @@
             String representation of graph
             </summary>
         </member>
+        <member name="M:HasK.Math.Graph.Graph.Clone">
+            <summary>
+            Returns copy of graph
+            </summary>
+            <returns>Returns new graph, copy of this</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.Equals(HasK.Math.Graph.Graph)">
+            <summary>
+            Check if that graph equals other by structure (names can be different)
+            </summary>
+            <param name="other">Other graph to equality check</param>
+            <returns>Returns true if other graph equals this by structure</returns>
+        </member>
         <member name="P:HasK.Math.Graph.Graph.Name">
             <summary>
             Name of graph
