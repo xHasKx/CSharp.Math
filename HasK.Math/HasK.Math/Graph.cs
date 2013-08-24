@@ -387,7 +387,7 @@ namespace HasK.Math.Graph
         /// <returns>Returns true if successfully removed</returns>
         public bool RemoveVertex(Vertex vertex)
         {
-            foreach (var link in GetVertexLinks(vertex))
+            foreach (var link in GetLinks(vertex))
                 RemoveLink(link);
             return vertices.Remove(vertex);
         }
@@ -491,7 +491,10 @@ namespace HasK.Math.Graph
         /// <returns>Returns new link</returns>
         public Link AddLink(string from, string to, double value)
         {
-            return AddLink(GetNextLinkName(), from, to, value);
+            var l = AddLink("temp-name", from, to, value);
+            if (l != null)
+                l.Name = GetNextLinkName();
+            return l;
         }
 
         /// <summary>
@@ -517,14 +520,6 @@ namespace HasK.Math.Graph
         }
 
         /// <summary>
-        /// Get all links of graph
-        /// </summary>
-        public Link[] GetLinks()
-        {
-            return links.ToArray();
-        }
-
-        /// <summary>
         /// Get link by name
         /// </summary>
         /// <param name="name">Name of link</param>
@@ -535,6 +530,95 @@ namespace HasK.Math.Graph
                 if (link.Name == name)
                     return link;
             return null;
+        }
+
+        /// <summary>
+        /// Get all links of graph
+        /// </summary>
+        public Link[] GetLinks()
+        {
+            return links.ToArray();
+        }
+
+        /// <summary>
+        /// Get links from and to given vertex
+        /// </summary>
+        /// <param name="vertex">Vertex to find links</param>
+        /// <returns>Returns array of links from and to given vertex</returns>
+        public Link[] GetLinks(Vertex vertex)
+        {
+            var found = new List<Link>();
+            foreach (var link in links)
+                if (link.From == vertex || link.To == vertex)
+                    found.Add(link);
+            return found.ToArray();
+        }
+
+        /// <summary>
+        /// Get links from and to given vertex
+        /// </summary>
+        /// <param name="name">Vertex name to find links</param>
+        /// <returns>Returns array of links from and to given vertex</returns>
+        public Link[] GetLinks(string name)
+        {
+            var vertex = GetVertex(name);
+            if (vertex == null)
+                throw new ArgumentException("Vertex with given name not presented in graph");
+            return GetLinks(vertex);
+        }
+
+        /// <summary>
+        /// Get links from given vertex
+        /// </summary>
+        /// <param name="vertex">Vertex to find links</param>
+        /// <returns>Returns array of links from given vertex</returns>
+        public Link[] GetLinksFrom(Vertex vertex)
+        {
+            var found = new List<Link>();
+            foreach (var link in links)
+                if (link.From == vertex)
+                    found.Add(link);
+            return found.ToArray();
+        }
+
+        /// <summary>
+        /// Get links from given vertex
+        /// </summary>
+        /// <param name="name">Vertex name to find links</param>
+        /// <returns>Returns array of links from given vertex</returns>
+        public Link[] GetLinksFrom(string name)
+        {
+            var vertex = GetVertex(name);
+            if (vertex == null)
+                throw new ArgumentException("Vertex with given name not presented in graph");
+            return GetLinksFrom(vertex);
+        }
+
+        /// <summary>
+        /// Get links to given vertex
+        /// </summary>
+        /// <param name="vertex">Vertex to find links</param>
+        /// <returns>Returns array of links to given vertex</returns>
+        public Link[] GetLinksTo(Vertex vertex)
+        {
+            var found = new List<Link>();
+            foreach (var link in links)
+                if (link.To == vertex)
+                    found.Add(link);
+            return found.ToArray();
+        }
+
+        /// <summary>
+        /// Get links to given vertex
+        /// </summary>
+        /// <param name="name">Vertex name to find links</param>
+        /// <returns>Returns array of links to given vertex</returns>
+        public Link[] GetLinksTo(string name)
+        {
+            var vertex = GetVertex(name);
+            if (vertex == null)
+                throw new ArgumentException("Vertex with given name not presented in graph");
+            return GetLinksTo(vertex);
         }
 
         /// <summary>
@@ -586,87 +670,6 @@ namespace HasK.Math.Graph
             if (link != null)
                 return RemoveLink(link);
             return false;
-        }
-
-        /// <summary>
-        /// Get links from given vertex
-        /// </summary>
-        /// <param name="vertex">Vertex to find links</param>
-        /// <returns>Returns array of links from given vertex</returns>
-        public Link[] GetVertexFromLinks(Vertex vertex)
-        {
-            var found = new List<Link>();
-            foreach (var link in links)
-                if (link.From == vertex)
-                    found.Add(link);
-            return found.ToArray();
-        }
-
-        /// <summary>
-        /// Get links from given vertex
-        /// </summary>
-        /// <param name="name">Vertex name to find links</param>
-        /// <returns>Returns array of links from given vertex</returns>
-        public Link[] GetVertexFromLinks(string name)
-        {
-            var vertex = GetVertex(name);
-            if (vertex == null)
-                throw new ArgumentException("Vertex with given name not presented in graph");
-            return GetVertexFromLinks(vertex);
-        }
-
-        /// <summary>
-        /// Get links to given vertex
-        /// </summary>
-        /// <param name="vertex">Vertex to find links</param>
-        /// <returns>Returns array of links to given vertex</returns>
-        public Link[] GetVertexToLinks(Vertex vertex)
-        {
-            var found = new List<Link>();
-            foreach (var link in links)
-                if (link.To == vertex)
-                    found.Add(link);
-            return found.ToArray();
-        }
-
-        /// <summary>
-        /// Get links to given vertex
-        /// </summary>
-        /// <param name="name">Vertex name to find links</param>
-        /// <returns>Returns array of links to given vertex</returns>
-        public Link[] GetVertexToLinks(string name)
-        {
-            var vertex = GetVertex(name);
-            if (vertex == null)
-                throw new ArgumentException("Vertex with given name not presented in graph");
-            return GetVertexToLinks(vertex);
-        }
-
-        /// <summary>
-        /// Get links from and to given vertex
-        /// </summary>
-        /// <param name="vertex">Vertex to find links</param>
-        /// <returns>Returns array of links from and to given vertex</returns>
-        public Link[] GetVertexLinks(Vertex vertex)
-        {
-            var found = new List<Link>();
-            foreach (var link in links)
-                if (link.From == vertex || link.To == vertex)
-                    found.Add(link);
-            return found.ToArray();
-        }
-
-        /// <summary>
-        /// Get links from and to given vertex
-        /// </summary>
-        /// <param name="name">Vertex name to find links</param>
-        /// <returns>Returns array of links from and to given vertex</returns>
-        public Link[] GetVertexLinks(string name)
-        {
-            var vertex = GetVertex(name);
-            if (vertex == null)
-                throw new ArgumentException("Vertex with given name not presented in graph");
-            return GetVertexLinks(vertex);
         }
 
         /// <summary>

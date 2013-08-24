@@ -278,17 +278,59 @@
             <param name="to">Name of to-vertice of link</param>
             <returns>Returns new link</returns>
         </member>
-        <member name="M:HasK.Math.Graph.Graph.GetLinks">
-            <summary>
-            Get all links of graph
-            </summary>
-        </member>
         <member name="M:HasK.Math.Graph.Graph.GetLink(System.String)">
             <summary>
             Get link by name
             </summary>
             <param name="name">Name of link</param>
             <returns>Returns link with given name or null if not found</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinks">
+            <summary>
+            Get all links of graph
+            </summary>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinks(HasK.Math.Graph.Vertex)">
+            <summary>
+            Get links from and to given vertex
+            </summary>
+            <param name="vertex">Vertex to find links</param>
+            <returns>Returns array of links from and to given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinks(System.String)">
+            <summary>
+            Get links from and to given vertex
+            </summary>
+            <param name="name">Vertex name to find links</param>
+            <returns>Returns array of links from and to given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinksFrom(HasK.Math.Graph.Vertex)">
+            <summary>
+            Get links from given vertex
+            </summary>
+            <param name="vertex">Vertex to find links</param>
+            <returns>Returns array of links from given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinksFrom(System.String)">
+            <summary>
+            Get links from given vertex
+            </summary>
+            <param name="name">Vertex name to find links</param>
+            <returns>Returns array of links from given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinksTo(HasK.Math.Graph.Vertex)">
+            <summary>
+            Get links to given vertex
+            </summary>
+            <param name="vertex">Vertex to find links</param>
+            <returns>Returns array of links to given vertex</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.GetLinksTo(System.String)">
+            <summary>
+            Get links to given vertex
+            </summary>
+            <param name="name">Vertex name to find links</param>
+            <returns>Returns array of links to given vertex</returns>
         </member>
         <member name="M:HasK.Math.Graph.Graph.GetVerticesByValue(System.Double)">
             <summary>
@@ -317,48 +359,6 @@
             </summary>
             <param name="name">Name of link</param>
             <returns>Returns true if successfully removed</returns>
-        </member>
-        <member name="M:HasK.Math.Graph.Graph.GetVertexFromLinks(HasK.Math.Graph.Vertex)">
-            <summary>
-            Get links from given vertex
-            </summary>
-            <param name="vertex">Vertex to find links</param>
-            <returns>Returns array of links from given vertex</returns>
-        </member>
-        <member name="M:HasK.Math.Graph.Graph.GetVertexFromLinks(System.String)">
-            <summary>
-            Get links from given vertex
-            </summary>
-            <param name="name">Vertex name to find links</param>
-            <returns>Returns array of links from given vertex</returns>
-        </member>
-        <member name="M:HasK.Math.Graph.Graph.GetVertexToLinks(HasK.Math.Graph.Vertex)">
-            <summary>
-            Get links to given vertex
-            </summary>
-            <param name="vertex">Vertex to find links</param>
-            <returns>Returns array of links to given vertex</returns>
-        </member>
-        <member name="M:HasK.Math.Graph.Graph.GetVertexToLinks(System.String)">
-            <summary>
-            Get links to given vertex
-            </summary>
-            <param name="name">Vertex name to find links</param>
-            <returns>Returns array of links to given vertex</returns>
-        </member>
-        <member name="M:HasK.Math.Graph.Graph.GetVertexLinks(HasK.Math.Graph.Vertex)">
-            <summary>
-            Get links from and to given vertex
-            </summary>
-            <param name="vertex">Vertex to find links</param>
-            <returns>Returns array of links from and to given vertex</returns>
-        </member>
-        <member name="M:HasK.Math.Graph.Graph.GetVertexLinks(System.String)">
-            <summary>
-            Get links from and to given vertex
-            </summary>
-            <param name="name">Vertex name to find links</param>
-            <returns>Returns array of links from and to given vertex</returns>
         </member>
         <member name="M:HasK.Math.Graph.Graph.ToString">
             <summary>
