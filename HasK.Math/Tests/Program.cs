@@ -26,8 +26,13 @@ namespace Tests
             G.AddVertex();
             G.AddVertex();
             G.AddVertex();
+            G.AddVertex();
 
             Console.WriteLine(G.AddLink("A", "B"));
+            G.AddLink("B", "D");
+            G.AddLink("B", "C");
+
+            G.DepthFirstSearch(delegate(Vertex v) { Console.WriteLine("go through vertex {0}", v); return false; });
 
             Console.WriteLine(G);
         }

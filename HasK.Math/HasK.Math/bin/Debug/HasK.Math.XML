@@ -157,6 +157,29 @@
             Create new directed graph with auto name
             </summary>
         </member>
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(HasK.Math.Graph.Vertex,System.Func{HasK.Math.Graph.Vertex,System.Boolean})">
+            <summary>
+            Run depth-first search through all vertices of graph starts from specified vertex
+            </summary>
+            <param name="vertex">Vertex to start search</param>
+            <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
+            <returns>Returns true only of callback function stops search by returning true</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.String,System.Func{HasK.Math.Graph.Vertex,System.Boolean})">
+            <summary>
+            Run depth-first search through all vertices of graph starts from specified vertex
+            </summary>
+            <param name="name">Vertex name to start search</param>
+            <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
+            <returns>Returns true only of callback function stops search by returning true</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.Func{HasK.Math.Graph.Vertex,System.Boolean})">
+            <summary>
+            Run depth-first search through all vertices of graph starts from first vertex of graph
+            </summary>
+            <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
+            <returns>Returns true only of callback function stops search by returning true</returns>
+        </member>
         <member name="M:HasK.Math.Graph.Graph.HasVertex(System.String)">
             <summary>
             Checks if vertex with given name presented

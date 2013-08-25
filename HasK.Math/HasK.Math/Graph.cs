@@ -291,7 +291,64 @@ namespace HasK.Math.Graph
             Undirected = false;
         }
 
-        
+        private bool DepthFirstSearchRunner(Vertex vertex, Func<Vertex, bool> callback, Dictionary<Vertex, bool> used)
+        {
+            used[vertex] = true;
+            if (callback(vertex))
+                return true;
+            if (Undirected)
+                foreach (var l in GetLinks(vertex))
+                {
+                    if (!used.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, callback, used))
+                        return true;
+                    if (!used.GetValueOrDefault(l.From, false) && DepthFirstSearchRunner(l.From, callback, used))
+                        return true;
+                }
+            else
+                foreach (var l in GetLinksFrom(vertex))
+                    if (!used.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, callback, used))
+                        return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Run depth-first search through all vertices of graph starts from specified vertex
+        /// </summary>
+        /// <param name="vertex">Vertex to start search</param>
+        /// <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
+        /// <returns>Returns true only of callback function stops search by returning true</returns>
+        public bool DepthFirstSearch(Vertex vertex, Func<Vertex, bool> callback)
+        {
+            if (vertex.Graph != this)
+                throw new ArgumentException("Vertex does not belong this graph");
+            return DepthFirstSearchRunner(vertex, callback, new Dictionary<Vertex, bool>());
+        }
+
+        /// <summary>
+        /// Run depth-first search through all vertices of graph starts from specified vertex
+        /// </summary>
+        /// <param name="name">Vertex name to start search</param>
+        /// <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
+        /// <returns>Returns true only of callback function stops search by returning true</returns>
+        public bool DepthFirstSearch(string name, Func<Vertex, bool> callback)
+        {
+            var vertex = GetVertex(name);
+            if (vertex == null)
+                throw new ArgumentException("Vertex with given name is not presented in this graph");
+            return DepthFirstSearch(vertex, callback);
+        }
+
+        /// <summary>
+        /// Run depth-first search through all vertices of graph starts from first vertex of graph
+        /// </summary>
+        /// <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
+        /// <returns>Returns true only of callback function stops search by returning true</returns>
+        public bool DepthFirstSearch(Func<Vertex, bool> callback)
+        {
+            if (vertices.Count > 0)
+                return DepthFirstSearch(vertices[0], callback);
+            return false;
+        }
 
         /// <summary>
         /// Checks if vertex with given name presented
@@ -723,5 +780,14 @@ namespace HasK.Math.Graph
             return true;
         }
         #endregion
+    }
+
+    public static class Extensions
+    {
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue)
+        {
+            TValue value;
+            return dictionary.TryGetValue(key, out value) ? value : defaultValue;
+        }
     }
 }
