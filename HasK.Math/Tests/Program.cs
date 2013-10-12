@@ -23,16 +23,25 @@ namespace Tests
         private static void TestGraph()
         {
             var G = new Graph("G");
-            G.AddVertex();
-            G.AddVertex();
-            G.AddVertex();
-            G.AddVertex();
+            for (int i = 1; i <= 10; i++)
+                G.AddVertex(i.ToString());
 
-            Console.WriteLine(G.AddLink("A", "B"));
-            G.AddLink("B", "D");
-            G.AddLink("B", "C");
+            G.AddLink("1", "2"); G.AddLink("1", "3"); G.AddLink("1", "4");
+            G.AddLink("2", "5"); G.AddLink("3", "6"); G.AddLink("3", "7"); G.AddLink("4", "8");
+            G.AddLink("5", "9"); G.AddLink("6", "10");
 
-            G.DepthFirstSearch(delegate(Vertex v) { Console.WriteLine("go through vertex {0}", v); });
+            int max = 0, depth = 0;
+            Console.WriteLine("\nIn Depth:");
+            G.DepthFirstSearch(delegate(Vertex v, Link l) {
+                if (l != null)
+                    Console.WriteLine("go through vertex {0} from {1}", v, l.From);
+                else
+                    Console.WriteLine("go through vertex {0} from NULL", v);
+            });
+
+
+            Console.WriteLine("\nIn Breadth:");
+            G.BreadthFirstSearch(delegate(Vertex v) { Console.WriteLine("go through vertex {0}", v); });
 
             Console.WriteLine(G);
         }

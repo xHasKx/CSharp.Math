@@ -296,12 +296,20 @@ namespace HasK.Math.Graph
         /// </summary>
         public class SearchStop : Exception { }
 
-        private bool DepthFirstSearchRunner(Vertex vertex, Action<Vertex> callback, Dictionary<Vertex, bool> used)
+        /// <summary>
+        /// Depth-first search recursive helper function
+        /// </summary>
+        /// <param name="vertex">Vertex for start search</param>
+        /// <param name="link">Link from what current vertex was visited</param>
+        /// <param name="callback">Callback function for each vertex</param>
+        /// <param name="visited">Dictionary for already visited vertices</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        private bool DepthFirstSearchRunner(Vertex vertex, Link from, Action<Vertex, Link> callback, Dictionary<Vertex, bool> visited)
         {
-            used[vertex] = true;
+            visited[vertex] = true;
             try
             {
-                callback(vertex);
+                callback(vertex, from);
             }
             catch (SearchStop)
             {
@@ -310,14 +318,14 @@ namespace HasK.Math.Graph
             if (Undirected)
                 foreach (var l in GetLinks(vertex))
                 {
-                    if (!used.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, callback, used))
+                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, l, callback, visited))
                         return true;
-                    if (!used.GetValueOrDefault(l.From, false) && DepthFirstSearchRunner(l.From, callback, used))
+                    if (!visited.GetValueOrDefault(l.From, false) && DepthFirstSearchRunner(l.From, l, callback, visited))
                         return true;
                 }
             else
                 foreach (var l in GetLinksFrom(vertex))
-                    if (!used.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, callback, used))
+                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, l, callback, visited))
                         return true;
             return false;
         }
@@ -326,22 +334,22 @@ namespace HasK.Math.Graph
         /// Run depth-first search through all vertices of graph starts from specified vertex
         /// </summary>
         /// <param name="vertex">Vertex to start search</param>
-        /// <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
-        /// <returns>Returns true only of callback function stops search by returning true</returns>
-        public bool DepthFirstSearch(Vertex vertex, Action<Vertex> callback)
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool DepthFirstSearch(Vertex vertex, Action<Vertex, Link> callback)
         {
             if (vertex.Graph != this)
                 throw new ArgumentException("Vertex does not belong this graph");
-            return DepthFirstSearchRunner(vertex, callback, new Dictionary<Vertex, bool>());
+            return DepthFirstSearchRunner(vertex, null, callback, new Dictionary<Vertex, bool>());
         }
 
         /// <summary>
         /// Run depth-first search through all vertices of graph starts from specified vertex
         /// </summary>
         /// <param name="name">Vertex name to start search</param>
-        /// <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
-        /// <returns>Returns true only of callback function stops search by returning true</returns>
-        public bool DepthFirstSearch(string name, Action<Vertex> callback)
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool DepthFirstSearch(string name, Action<Vertex, Link> callback)
         {
             var vertex = GetVertex(name);
             if (vertex == null)
@@ -352,12 +360,94 @@ namespace HasK.Math.Graph
         /// <summary>
         /// Run depth-first search through all vertices of graph starts from first vertex of graph
         /// </summary>
-        /// <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
-        /// <returns>Returns true only of callback function stops search by returning true</returns>
-        public bool DepthFirstSearch(Action<Vertex> callback)
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool DepthFirstSearch(Action<Vertex, Link> callback)
         {
             if (vertices.Count > 0)
                 return DepthFirstSearch(vertices[0], callback);
+            return false;
+        }
+
+        /// <summary>
+        /// Breadth-first search recursive helper function
+        /// </summary>
+        /// <param name="callback">Callback function for each vertex</param>
+        /// <param name="visited">Dictionary for already visited vertices</param>
+        /// <param name="queue">Queue for enum vertices</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        private bool BreadthFirstSearchRunner(Action<Vertex> callback, Dictionary<Vertex, bool> visited, Queue<Vertex> queue)
+        {
+            if (queue.Count == 0)
+                return false;
+            var vertex = queue.Dequeue();
+            visited[vertex] = true;
+            try
+            {
+                callback(vertex);
+            }
+            catch (SearchStop)
+            {
+                return true;
+            }
+            if (Undirected)
+            {
+                foreach (var l in GetLinks(vertex))
+                {
+                    if (!visited.GetValueOrDefault(l.To, false) && !queue.Contains(l.To))
+                        queue.Enqueue(l.To);
+                    if (!visited.GetValueOrDefault(l.From, false) && !queue.Contains(l.From))
+                        queue.Enqueue(l.From);
+                }
+                return BreadthFirstSearchRunner(callback, visited, queue);
+            }
+            else
+            {
+                foreach (var l in GetLinksFrom(vertex))
+                    if (!visited.GetValueOrDefault(l.To, false) && !queue.Contains(l.To))
+                        queue.Enqueue(l.To);
+                return BreadthFirstSearchRunner(callback, visited, queue);
+            }
+        }
+
+        /// <summary>
+        /// Run breadth-first search through all vertices of graph starts from given vertex
+        /// </summary>
+        /// <param name="vertex">Vertex to start search</param>
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool BreadthFirstSearch(Vertex vertex, Action<Vertex> callback)
+        {
+            if (vertex.Graph != this)
+                throw new ArgumentException("Vertex does not belong this graph");
+            var queue = new Queue<Vertex>();
+            queue.Enqueue(vertex);
+            return BreadthFirstSearchRunner(callback, new Dictionary<Vertex, bool>(), queue);
+        }
+
+        /// <summary>
+        /// Run breadth-first search through all vertices of graph starts from vertex with given name
+        /// </summary>
+        /// <param name="name">Name of vertex to start search</param>
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool BreadthFirstSearch(string name, Action<Vertex> callback)
+        {
+            var vertex = GetVertex(name);
+            if (vertex == null)
+                throw new ArgumentException("Vertex with given name is not presented in this graph");
+            return BreadthFirstSearch(vertex, callback);
+        }
+
+        /// <summary>
+        /// Run breadth-first search through all vertices of graph starts from first vertex of graph
+        /// </summary>
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool BreadthFirstSearch(Action<Vertex> callback)
+        {
+            if (vertices.Count > 0)
+                return BreadthFirstSearch(vertices[0], callback);
             return false;
         }
 
