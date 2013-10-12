@@ -157,6 +157,38 @@
             Create new directed graph with auto name
             </summary>
         </member>
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearchRunner(HasK.Math.Graph.Vertex,System.Action{HasK.Math.Graph.Vertex},System.Collections.Generic.Dictionary{HasK.Math.Graph.Vertex,System.Boolean})">
+            <summary>
+            Depth-first search recursive helper function
+            </summary>
+            <param name="vertex">Vertex for start search</param>
+            <param name="callback">Callback function for each vertex</param>
+            <param name="visited">Dictionary for already visited vertices</param>
+            <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(HasK.Math.Graph.Vertex,System.Action{HasK.Math.Graph.Vertex})">
+            <summary>
+            Run depth-first search through all vertices of graph starts from specified vertex
+            </summary>
+            <param name="vertex">Vertex to start search</param>
+            <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+            <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.String,System.Action{HasK.Math.Graph.Vertex})">
+            <summary>
+            Run depth-first search through all vertices of graph starts from specified vertex
+            </summary>
+            <param name="name">Vertex name to start search</param>
+            <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+            <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        </member>
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.Action{HasK.Math.Graph.Vertex})">
+            <summary>
+            Run depth-first search through all vertices of graph starts from first vertex of graph
+            </summary>
+            <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+            <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        </member>
         <member name="M:HasK.Math.Graph.Graph.DepthFirstSearchRunner(HasK.Math.Graph.Vertex,HasK.Math.Graph.Link,System.Int32,System.Action{HasK.Math.Graph.Vertex,HasK.Math.Graph.Link,System.Int32},System.Collections.Generic.Dictionary{HasK.Math.Graph.Vertex,System.Boolean})">
             <summary>
             Depth-first search recursive helper function

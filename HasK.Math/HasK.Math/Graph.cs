@@ -296,6 +296,84 @@ namespace HasK.Math.Graph
         /// </summary>
         public class SearchStop : Exception { }
 
+
+
+
+        /// <summary>
+        /// Depth-first search recursive helper function
+        /// </summary>
+        /// <param name="vertex">Vertex for start search</param>
+        /// <param name="callback">Callback function for each vertex</param>
+        /// <param name="visited">Dictionary for already visited vertices</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        private bool DepthFirstSearchRunner(Vertex vertex, Action<Vertex> callback, Dictionary<Vertex, bool> visited)
+        {
+            visited[vertex] = true;
+            try
+            {
+                callback(vertex);
+            }
+            catch (SearchStop)
+            {
+                return true;
+            }
+            if (Undirected)
+                foreach (var l in GetLinks(vertex))
+                {
+                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, callback, visited))
+                        return true;
+                    if (!visited.GetValueOrDefault(l.From, false) && DepthFirstSearchRunner(l.From, callback, visited))
+                        return true;
+                }
+            else
+                foreach (var l in GetLinksFrom(vertex))
+                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, callback, visited))
+                        return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Run depth-first search through all vertices of graph starts from specified vertex
+        /// </summary>
+        /// <param name="vertex">Vertex to start search</param>
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool DepthFirstSearch(Vertex vertex, Action<Vertex> callback)
+        {
+            if (vertex.Graph != this)
+                throw new ArgumentException("Vertex does not belong this graph");
+            return DepthFirstSearchRunner(vertex, callback, new Dictionary<Vertex, bool>());
+        }
+
+        /// <summary>
+        /// Run depth-first search through all vertices of graph starts from specified vertex
+        /// </summary>
+        /// <param name="name">Vertex name to start search</param>
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool DepthFirstSearch(string name, Action<Vertex> callback)
+        {
+            var vertex = GetVertex(name);
+            if (vertex == null)
+                throw new ArgumentException("Vertex with given name is not presented in this graph");
+            return DepthFirstSearch(vertex, callback);
+        }
+
+        /// <summary>
+        /// Run depth-first search through all vertices of graph starts from first vertex of graph
+        /// </summary>
+        /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
+        /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
+        public bool DepthFirstSearch(Action<Vertex> callback)
+        {
+            if (vertices.Count > 0)
+                return DepthFirstSearch(vertices[0], callback);
+            return false;
+        }
+
+
+
+
         /// <summary>
         /// Depth-first search recursive helper function
         /// </summary>
@@ -369,6 +447,9 @@ namespace HasK.Math.Graph
                 return DepthFirstSearch(vertices[0], callback);
             return false;
         }
+
+
+
 
         /// <summary>
         /// Breadth-first search recursive helper function
@@ -451,6 +532,9 @@ namespace HasK.Math.Graph
                 return BreadthFirstSearch(vertices[0], callback);
             return false;
         }
+
+
+
 
         /// <summary>
         /// Checks if vertex with given name presented
