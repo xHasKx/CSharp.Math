@@ -32,7 +32,7 @@ namespace Tests
             G.AddLink("B", "D");
             G.AddLink("B", "C");
 
-            G.DepthFirstSearch(delegate(Vertex v) { Console.WriteLine("go through vertex {0}", v); return false; });
+            G.DepthFirstSearch(delegate(Vertex v) { Console.WriteLine("go through vertex {0}", v); });
 
             Console.WriteLine(G);
         }

@@ -157,7 +157,7 @@
             Create new directed graph with auto name
             </summary>
         </member>
-        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(HasK.Math.Graph.Vertex,System.Func{HasK.Math.Graph.Vertex,System.Boolean})">
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(HasK.Math.Graph.Vertex,System.Action{HasK.Math.Graph.Vertex})">
             <summary>
             Run depth-first search through all vertices of graph starts from specified vertex
             </summary>
@@ -165,7 +165,7 @@
             <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
             <returns>Returns true only of callback function stops search by returning true</returns>
         </member>
-        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.String,System.Func{HasK.Math.Graph.Vertex,System.Boolean})">
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.String,System.Action{HasK.Math.Graph.Vertex})">
             <summary>
             Run depth-first search through all vertices of graph starts from specified vertex
             </summary>
@@ -173,7 +173,7 @@
             <param name="callback">Callback function which will be called for each vertex. Can return true to stop search.</param>
             <returns>Returns true only of callback function stops search by returning true</returns>
         </member>
-        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.Func{HasK.Math.Graph.Vertex,System.Boolean})">
+        <member name="M:HasK.Math.Graph.Graph.DepthFirstSearch(System.Action{HasK.Math.Graph.Vertex})">
             <summary>
             Run depth-first search through all vertices of graph starts from first vertex of graph
             </summary>
@@ -409,6 +409,11 @@
         <member name="P:HasK.Math.Graph.Graph.Undirected">
             <summary>
             Indicates is that graph is undirected
+            </summary>
+        </member>
+        <member name="T:HasK.Math.Graph.Graph.SearchStop">
+            <summary>
+            Raise this exception to stop search in graph
             </summary>
         </member>
         <member name="T:HasK.Math.Matrix.Matrix">
