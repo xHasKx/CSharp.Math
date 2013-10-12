@@ -960,7 +960,7 @@ namespace HasK.Math.Graph
             {
                 var ol = other.links[i];
                 var l = links[i];
-                if (ol.From != l.From || ol.To != l.To || ol.Value != l.Value)
+                if (ol.From.Name != l.From.Name || ol.To.Name != l.To.Name || ol.Value != l.Value)
                     return false;
             }
             return true;
