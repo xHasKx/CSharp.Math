@@ -292,7 +292,7 @@ namespace HasK.Math.Graph
         }
 
         /// <summary>
-        /// Raise this exception to stop search in graph
+        /// Throw this exception to stop search in graph
         /// </summary>
         public class SearchStop : Exception { }
 
@@ -300,16 +300,17 @@ namespace HasK.Math.Graph
         /// Depth-first search recursive helper function
         /// </summary>
         /// <param name="vertex">Vertex for start search</param>
-        /// <param name="link">Link from what current vertex was visited</param>
+        /// <param name="from">Link from what current vertex was visited</param>
+        /// <param name="level">Current level of search</param>
         /// <param name="callback">Callback function for each vertex</param>
         /// <param name="visited">Dictionary for already visited vertices</param>
         /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
-        private bool DepthFirstSearchRunner(Vertex vertex, Link from, Action<Vertex, Link> callback, Dictionary<Vertex, bool> visited)
+        private bool DepthFirstSearchRunner(Vertex vertex, Link from, int level, Action<Vertex, Link, int> callback, Dictionary<Vertex, bool> visited)
         {
             visited[vertex] = true;
             try
             {
-                callback(vertex, from);
+                callback(vertex, from, level);
             }
             catch (SearchStop)
             {
@@ -318,14 +319,14 @@ namespace HasK.Math.Graph
             if (Undirected)
                 foreach (var l in GetLinks(vertex))
                 {
-                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, l, callback, visited))
+                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, l, level + 1, callback, visited))
                         return true;
-                    if (!visited.GetValueOrDefault(l.From, false) && DepthFirstSearchRunner(l.From, l, callback, visited))
+                    if (!visited.GetValueOrDefault(l.From, false) && DepthFirstSearchRunner(l.From, l, level + 1, callback, visited))
                         return true;
                 }
             else
                 foreach (var l in GetLinksFrom(vertex))
-                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, l, callback, visited))
+                    if (!visited.GetValueOrDefault(l.To, false) && DepthFirstSearchRunner(l.To, l, level + 1, callback, visited))
                         return true;
             return false;
         }
@@ -336,11 +337,11 @@ namespace HasK.Math.Graph
         /// <param name="vertex">Vertex to start search</param>
         /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
         /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
-        public bool DepthFirstSearch(Vertex vertex, Action<Vertex, Link> callback)
+        public bool DepthFirstSearch(Vertex vertex, Action<Vertex, Link, int> callback)
         {
             if (vertex.Graph != this)
                 throw new ArgumentException("Vertex does not belong this graph");
-            return DepthFirstSearchRunner(vertex, null, callback, new Dictionary<Vertex, bool>());
+            return DepthFirstSearchRunner(vertex, null, 0, callback, new Dictionary<Vertex, bool>());
         }
 
         /// <summary>
@@ -349,7 +350,7 @@ namespace HasK.Math.Graph
         /// <param name="name">Vertex name to start search</param>
         /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
         /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
-        public bool DepthFirstSearch(string name, Action<Vertex, Link> callback)
+        public bool DepthFirstSearch(string name, Action<Vertex, Link, int> callback)
         {
             var vertex = GetVertex(name);
             if (vertex == null)
@@ -362,7 +363,7 @@ namespace HasK.Math.Graph
         /// </summary>
         /// <param name="callback">Callback function which will be called for each vertex. Can throw StopSearch to stop search.</param>
         /// <returns>Returns true only if callback function stops search by throwing StopSearch</returns>
-        public bool DepthFirstSearch(Action<Vertex, Link> callback)
+        public bool DepthFirstSearch(Action<Vertex, Link, int> callback)
         {
             if (vertices.Count > 0)
                 return DepthFirstSearch(vertices[0], callback);

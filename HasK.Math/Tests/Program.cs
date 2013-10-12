@@ -32,9 +32,9 @@ namespace Tests
 
             int max = 0, depth = 0;
             Console.WriteLine("\nIn Depth:");
-            G.DepthFirstSearch(delegate(Vertex v, Link l) {
+            G.DepthFirstSearch(delegate(Vertex v, Link l, int level) {
                 if (l != null)
-                    Console.WriteLine("go through vertex {0} from {1}", v, l.From);
+                    Console.WriteLine("go through vertex {0} from {1}, level {2}", v, l.From, level);
                 else
                     Console.WriteLine("go through vertex {0} from NULL", v);
             });
